@@ -1,0 +1,121 @@
+<dashboard>
+  <label>ES Upgrade - Technical Add-On Reporting</label>
+  <row>
+    <panel>
+      <single>
+        <title>Splunk ES Version</title>
+        <search>
+          <query>| rest /services/apps/local | search label="Enterprise Security" | table version</query>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0xd93f3c","0x65a637","0xd93f3c"]</option>
+        <option name="rangeValues">[5,10]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">Splunk ES Version</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Enabled TAs</title>
+        <search>
+          <query>| rest /services/apps/local | search (disabled=0 OR disabled=1) (title=TA* OR title=Splunk_TA*) | eval state=case(disabled == 1, "disabled", disabled == 0, "enabled") | search state=enabled | stats count by state | table count</query>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0x65a637","0x65a637"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">Enabled TAs</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Disabled TAs</title>
+        <search>
+          <query>| rest /services/apps/local | search (disabled=0 OR disabled=1) (title=TA* OR title=Splunk_TA*) | eval state=case(disabled == 1, "disabled", disabled == 0, "enabled") | search state=disabled | stats count by state | table count</query>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">none</option>
+        <option name="numberPrecision">0</option>
+        <option name="rangeColors">["0xd93f3c","0xd93f3c"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="showSparkline">1</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trendColorInterpretation">standard</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="trendInterval">auto</option>
+        <option name="underLabel">Disabled TAs</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <option name="linkView">search</option>
+        <option name="drilldown">none</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>TA-* and Splunk_TA* Technical Add-Ons Managed by Deployment Server (disabled Deployment Client prior to ES upgrade)</title>
+        <search>
+          <query>| rest /services/apps/local | search (disabled=0 OR disabled=1) (title=TA* OR title=Splunk_TA*) | eval state=case(disabled == 1, "disabled", disabled == 0, "enabled")| search managed_by_deployment_cilent=1 | table title label state version managed_by_deployment_client | sort title</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>ENABLED TA-* and Splunk_TA* Technical Add-Ons</title>
+        <search>
+          <query>| rest /services/apps/local | search (disabled=0 OR disabled=1) (title=TA* OR title=Splunk_TA*) | eval state=case(disabled == 1, "disabled", disabled == 0, "enabled")| search state=enabled | table title label state version managed_by_deployment_client | sort title</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">50</option>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>DISABLED TA-* and Splunk_TA* Technical Add-Ons</title>
+        <search>
+          <query>| rest /services/apps/local | search (disabled=0 OR disabled=1) (title=TA* OR title=Splunk_TA*) | eval state=case(disabled == 1, "disabled", disabled == 0, "enabled")| search state=disabled | table title label state version managed_by_deployment_client | sort title</query>
+          <earliest>0</earliest>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">50</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
